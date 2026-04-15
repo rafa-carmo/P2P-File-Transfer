@@ -414,7 +414,44 @@ Found a bug? Open an issue describing:
 
 ---
 
-## 📄 License
+## � Deployment
+
+### GitHub Pages Setup
+
+This project is configured for automatic deployment to GitHub Pages using GitHub Actions. For complete setup instructions, see [GITHUB_PAGES_DEPLOYMENT.md](GITHUB_PAGES_DEPLOYMENT.md).
+
+### GitHub Configuration Files
+
+The repository includes professional GitHub configuration files:
+
+- **[.github/workflows/deploy.yml](.github/workflows/deploy.yml)** - Automated CI/CD pipeline
+- **[.github/dependabot.yml](.github/dependabot.yml)** - Automatic dependency updates
+- **[.github/CODEOWNERS](.github/CODEOWNERS)** - Code review assignments
+- **[.github/pull_request_template.md](.github/pull_request_template.md)** - PR guidelines
+- **[.github/ISSUE_TEMPLATE/](.github/ISSUE_TEMPLATE/)** - Issue templates
+
+For detailed explanation of all configuration files, see [GITHUB_CONFIG_GUIDE.md](GITHUB_CONFIG_GUIDE.md).
+
+### Quick Deploy
+
+1. Push to `main` branch:
+
+```bash
+git push origin main
+```
+
+2. Workflow automatically:
+   - Tests on Node 18.x and 20.x
+   - Builds the application
+   - Deploys to GitHub Pages
+
+3. View progress in **Actions** tab
+
+4. Access your site at `https://username.github.io/file-transfer`
+
+---
+
+## �📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 

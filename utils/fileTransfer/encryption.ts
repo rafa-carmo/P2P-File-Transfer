@@ -43,7 +43,7 @@ export async function importKeyFromString(keyString: string): Promise<CryptoKey>
  * Criptografa um ArrayBuffer
  */
 export async function encryptData(
-  data: ArrayBuffer,
+  data: BufferSource,
   key: CryptoKey,
 ): Promise<EncryptedData> {
   const iv = window.crypto.getRandomValues(new Uint8Array(12)); // 96-bit IV para GCM
@@ -81,8 +81,8 @@ export async function decryptData(
 /**
  * Converte ArrayBuffer para Base64
  */
-export function arrayBufferToBase64(buffer: ArrayBuffer): string {
-  const bytes = new Uint8Array(buffer);
+export function arrayBufferToBase64(buffer: ArrayBuffer | Uint8Array): string {
+  const bytes = buffer instanceof Uint8Array ? buffer : new Uint8Array(buffer);
   let binary = "";
   for (let i = 0; i < bytes.byteLength; i++) {
     binary += String.fromCharCode(bytes[i]);
@@ -106,7 +106,7 @@ export function base64ToArrayBuffer(base64: string): ArrayBuffer {
  * Criptografa um objeto JSON
  */
 export async function encryptJSON(
-  data: Record<string, any>,
+  data: Record<string, unknown>,
   key: CryptoKey,
 ): Promise<EncryptedData> {
   const jsonString = JSON.stringify(data);
@@ -122,7 +122,7 @@ export async function encryptJSON(
 export async function decryptJSON(
   encryptedData: EncryptedData,
   key: CryptoKey,
-): Promise<Record<string, any>> {
+): Promise<Record<string, unknown>> {
   const decrypted = await decryptData(encryptedData, key);
   const decoder = new TextDecoder();
   const jsonString = decoder.decode(decrypted);
