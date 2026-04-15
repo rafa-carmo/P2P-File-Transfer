@@ -9,58 +9,58 @@
 [![Encryption](https://img.shields.io/badge/Encryption-AES--256--GCM-FF6B6B?style=flat-square&logo=lock)](https://en.wikipedia.org/wiki/Galois/Counter_Mode)
 [![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)](LICENSE)
 
-Transferência de arquivos P2P segura via WebRTC com criptografia end-to-end AES-256-GCM
+Secure P2P file transfer via WebRTC with end-to-end AES-256-GCM encryption
 
-[Features](#-features) • [Instalação](#-instalação) • [Como Usar](#-como-usar) • [Estrutura](#-estrutura-do-projeto) • [Contribuição](#-contribuição)
+[Features](#-features) • [Installation](#-installation) • [How to Use](#-how-to-use) • [Structure](#-project-structure) • [Contributing](#-contributing)
 
 </div>
 
 ---
 
-## 📋 Sobre o Projeto
+## 📋 About the Project
 
-**P2P File Transfer** é uma aplicação web moderna para transferência de arquivos diretamente entre dois peers usando WebRTC, eliminando a necessidade de um servidor centralizado. Todos os dados são criptografados end-to-end com AES-256-GCM, garantindo privacidade e segurança total.
+**P2P File Transfer** is a modern web application for transferring files directly between two peers using WebRTC, eliminating the need for a centralized server. All data is encrypted end-to-end with AES-256-GCM, ensuring total privacy and security.
 
-### Por que usar?
+### Why use it?
 
-- ✅ **Zero Servidor** - Não há servidor armazenando seus arquivos
-- ✅ **Criptografia Militar** - AES-256-GCM oferece segurança de nível militar
-- ✅ **Privacidade** - Apenas os peers com a chave correta podem acessar
-- ✅ **Rápido** - Conexão direta P2P minimiza latência
-- ✅ **Sem Limite de Tamanho** - Transferências em chunks, sem limite de arquivo
-- ✅ **Código Aberto** - Totalmente audível e modificável
+- ✅ **Zero Server** - No server storing your files
+- ✅ **Military Grade Encryption** - AES-256-GCM provides military-level security
+- ✅ **Privacy** - Only peers with the correct key can access
+- ✅ **Fast** - Direct P2P connection minimizes latency
+- ✅ **No Size Limit** - Transfers in chunks, no file size limit
+- ✅ **Open Source** - Fully auditable and modifiable
 
 ---
 
 ## ⚡ Features
 
-### 🔗 Conectividade P2P
+### 🔗 P2P Connectivity
 
-- Estabelecimento automático de conexão WebRTC
-- Suporte a ICE candidates do Google STUN
-- Sinalização SDP manual para máxima privacidade
-- Reconexão automática em caso de falhas
+- Automatic WebRTC connection establishment
+- Google STUN ICE candidates support
+- Manual SDP signaling for maximum privacy
+- Automatic reconnection on failures
 
-### 🔐 Segurança
+### 🔐 Security
 
-- **AES-256-GCM** - Padrão de encriptação NIST aprovado
-- Chaves geradas localmente no navegador
-- IV (Initialization Vector) aleatório por chunk
-- Nenhum compartilhamento de chaves não-autorizado
+- **AES-256-GCM** - NIST approved encryption standard
+- Keys generated locally in the browser
+- Random IV (Initialization Vector) per chunk
+- No unauthorized key sharing
 
-### 📦 Transferência
+### 📦 Transfer
 
-- Chunks paralelos para melhor performance
-- Progress bar em tempo real
-- Buffer intelligente (64KB) para otimizar throughput
-- Detecção automática de criptografia
+- Parallel chunks for better performance
+- Real-time progress bar
+- Intelligent buffer (64KB) to optimize throughput
+- Automatic encryption detection
 
 ### 🎨 Interface
 
-- Design moderno e responsivo
-- Tema claro/escuro automático
-- Feedback visual em tempo real
-- Interface intuitiva para iniciantes
+- Modern and responsive design
+- Automatic light/dark theme
+- Real-time visual feedback
+- Beginner-friendly interface
 
 ---
 
@@ -71,7 +71,7 @@ Transferência de arquivos P2P segura via WebRTC com criptografia end-to-end AES
 <td><strong>Frontend</strong></td>
 <td>
 
-- **Next.js 16.2.1** - Framework React full-stack
+- **Next.js 16.2.1** - Full-stack React framework
 - **React 19.2.4** - UI Components
 - **TypeScript 5.0** - Type safety
 - **Tailwind CSS 4** - Styling
@@ -92,12 +92,12 @@ Transferência de arquivos P2P segura via WebRTC com criptografia end-to-end AES
 </td>
 </tr>
 <tr>
-<td><strong>P2P & Segurança</strong></td>
+<td><strong>P2P & Security</strong></td>
 <td>
 
-- **WebRTC** - Conexão P2P nativa do navegador
-- **Web Crypto API** - Criptografia nativa do browser
-- **AES-256-GCM** - Algoritmo de encriptação
+- **WebRTC** - Native P2P connection in browser
+- **Web Crypto API** - Native browser cryptography
+- **AES-256-GCM** - Encryption algorithm
 
 </td>
 </tr>
@@ -105,49 +105,49 @@ Transferência de arquivos P2P segura via WebRTC com criptografia end-to-end AES
 
 ---
 
-## 📦 Instalação
+## 📦 Installation
 
-### Pré-requisitos
+### Prerequisites
 
 - Node.js 18+
-- npm, yarn, pnpm ou bun
+- npm, yarn, pnpm or bun
 
-### Passos
+### Steps
 
-1. **Clone o repositório**
+1. **Clone the repository**
 
 ```bash
 git clone https://github.com/seu-usuario/file-transfer.git
 cd file-transfer
 ```
 
-2. **Instale as dependências**
+2. **Install dependencies**
 
 ```bash
 npm install
-# ou
+# or
 yarn install
 pnpm install
 bun install
 ```
 
-3. **Configure variáveis de ambiente**
+3. **Configure environment variables**
 
 ```bash
 cp .env.example .env.local
 ```
 
-4. **Execute o servidor de desenvolvimento**
+4. **Run the development server**
 
 ```bash
 npm run dev
-# ou
+# or
 yarn dev
 pnpm dev
 bun dev
 ```
 
-5. **Abra no navegador**
+5. **Open in browser**
 
 ```
 http://localhost:3000
@@ -155,37 +155,37 @@ http://localhost:3000
 
 ---
 
-## 🚀 Como Usar
+## 🚀 How to Use
 
-### Fluxo de Transferência
+### Transfer Flow
 
-#### 1️⃣ **Lado do Remetente (Quem envia)**
-
-```
-1. Clique em "Iniciar como Remetente"
-2. Copie o SDP Local gerado
-3. Compartilhe com o receptor via email/chat/etc
-4. Receba o SDP remoto do receptor e cole
-5. Gere uma chave de criptografia
-6. Compartilhe sua chave com o receptor
-7. Cole a chave do receptor
-8. Selecione o arquivo e envie
-```
-
-#### 2️⃣ **Lado do Receptor (Quem recebe)**
+#### 1️⃣ **Sender Side (Who sends)**
 
 ```
-1. Clique em "Inicializar Conexão"
-2. Copie o SDP Local gerado
-3. Compartilhe com o remetente
-4. Cole o SDP remoto do remetente
-5. Gere uma chave de criptografia
-6. Compartilhe sua chave com o remetente
-7. Cole a chave do remetente
-8. Aguarde o arquivo (download automático)
+1. Click "Start as Sender"
+2. Copy the generated Local SDP
+3. Share with receiver via email/chat/etc
+4. Receive the receiver's remote SDP and paste it
+5. Generate an encryption key
+6. Share your key with the receiver
+7. Paste the receiver's key
+8. Select the file and send
 ```
 
-### Exemplo de Código
+#### 2️⃣ **Receiver Side (Who receives)**
+
+```
+1. Click "Initialize Connection"
+2. Copy the generated Local SDP
+3. Share with sender
+4. Paste the sender's remote SDP
+5. Generate an encryption key
+6. Share your key with the sender
+7. Paste the sender's key
+8. Await the file (automatic download)
+```
+
+### Code Example
 
 ```typescript
 import { useFileTransfer } from "@/utils/fileTransfer";
@@ -203,7 +203,7 @@ export function MyComponent() {
   return (
     <div>
       <button onClick={generateEncryptionKey}>
-        Gerar Chave
+        Generate Key
       </button>
       <input
         type="file"
@@ -219,18 +219,18 @@ export function MyComponent() {
 
 ---
 
-## 📁 Estrutura do Projeto
+## 📁 Project Structure
 
 ```
 file-transfer/
 ├── app/                          # Next.js App Router
-│   ├── layout.tsx               # Layout principal
-│   ├── page.tsx                 # Página inicial
-│   └── globals.css              # Estilos globais
+│   ├── layout.tsx               # Main layout
+│   ├── page.tsx                 # Home page
+│   └── globals.css              # Global styles
 │
 ├── components/
-│   ├── FileTransferComponent.tsx # Componente principal
-│   └── ui/                       # Componentes Shadcn/UI
+│   ├── FileTransferComponent.tsx # Main component
+│   └── ui/                       # Shadcn/UI Components
 │       ├── button.tsx
 │       ├── progress.tsx
 │       ├── textarea.tsx
@@ -239,123 +239,123 @@ file-transfer/
 ├── utils/fileTransfer/           # Lógica de transferência
 │   ├── index.ts                 # Exports
 │   ├── types.ts                 # Type definitions
-│   ├── constants.ts             # Constantes (CHUNK_SIZE, etc)
-│   ├── encryption.ts            # Funções de criptografia AES-256-GCM
-│   ├── keyManagement.ts         # Gerenciamento de chaves
+│   ├── constants.ts             # Constants (CHUNK_SIZE, etc)
+│   ├── encryption.ts            # AES-256-GCM encryption functions
+│   ├── keyManagement.ts         # Key management
 │   ├── peerConnection.ts        # WebRTC RTCPeerConnection
 │   ├── channel.ts               # RTCDataChannel setup
 │   ├── signaling.ts             # SDP Offer/Answer
-│   ├── sendFile.ts              # Lógica de envio
-│   ├── receiveFile.ts           # Lógica de recepção
-│   ├── download.ts              # Download dos arquivos
-│   ├── useFileTransfer.ts       # Hook React principal
-│   └── README.md                # Documentação detalhada
+│   ├── sendFile.ts              # Send logic
+│   ├── receiveFile.ts           # Receive logic
+│   ├── download.ts              # File download
+│   ├── useFileTransfer.ts       # Main React hook
+│   └── README.md                # Detailed documentation
 │
 ├── prisma/
-│   ├── schema.prisma            # Schema do banco
+│   ├── schema.prisma            # Database schema
 │   └── migrations/              # Migrations
 │
-├── public/                       # Arquivos estáticos
-├── package.json                 # Dependências
-├── tsconfig.json               # Config TypeScript
-├── next.config.ts              # Config Next.js
-└── README.md                   # Este arquivo
+├── public/                       # Static files
+├── package.json                 # Dependencies
+├── tsconfig.json               # TypeScript config
+├── next.config.ts              # Next.js config
+└── README.md                   # This file
 ```
 
 ---
 
-## 🔐 Segurança & Criptografia
+## 🔐 Security & Encryption
 
-### Como Funciona a Criptografia
+### How Encryption Works
 
-1. **Geração de Chave**: Cada peer gera uma chave AES-256 localmente
-2. **Compartilhamento**: As chaves são trocadas manualmente via SDP (fora da band)
-3. **Encriptação**: Cada chunk é encriptado com a chave + IV aleatório
-4. **Descriptografia**: O receptor descriptografa com a chave recebida
+1. **Key Generation**: Each peer generates an AES-256 key locally
+2. **Key Sharing**: Keys are exchanged manually via SDP (out of band)
+3. **Encryption**: Each chunk is encrypted with the key + random IV
+4. **Decryption**: Receiver decrypts with the received key
 
-### Fluxo de Dados
+### Data Flow
 
 ```
-Arquivo Original
+Original File
     ↓
-[Dividido em chunks]
+[Split into chunks]
     ↓
-[Cada chunk: Encriptado com AES-256-GCM + IV aleatório]
+[Each chunk: Encrypted with AES-256-GCM + random IV]
     ↓
-[Transmitido via WebRTC DataChannel]
+[Transmitted via WebRTC DataChannel]
     ↓
-[Receptor recebe chunk encriptado]
+[Receiver receives encrypted chunk]
     ↓
-[Descriptografa com a chave importada]
+[Decrypts with imported key]
     ↓
-[Reconstrói o arquivo original]
+[Reconstructs original file]
     ↓
-Download Automático
+Automatic Download
 ```
 
-### Padrões de Segurança
+### Security Standards
 
-- ✅ **AES-256-GCM**: Encriptação simétrica de 256 bits com Galois/Counter Mode
-- ✅ **Web Crypto API**: Criptografia nativa do navegador (sem bibliotecas)
-- ✅ **IV Aleatório**: Novo IV para cada chunk previne padrões
-- ✅ **Base64 Encoding**: Chaves compartilháveis via texto
+- ✅ **AES-256-GCM**: 256-bit symmetric encryption with Galois/Counter Mode
+- ✅ **Web Crypto API**: Native browser cryptography (no libraries)
+- ✅ **Random IV**: New IV per chunk prevents patterns
+- ✅ **Base64 Encoding**: Shareable keys via text
 
 ---
 
 ## 📊 Performance
 
-### Configuração Padrão
+### Default Configuration
 
-| Propriedade | Valor       | Descrição                      |
-| ----------- | ----------- | ------------------------------ |
-| CHUNK_SIZE  | 16 KB       | Tamanho de cada bloco          |
-| MAX_BUFFER  | 64 KB       | Buffer máximo antes de pausar  |
-| IV Length   | 12 bytes    | Initialization Vector para GCM |
-| Algorithm   | AES-256-GCM | Encriptação                    |
+| Property   | Value       | Description                |
+| ---------- | ----------- | -------------------------- |
+| CHUNK_SIZE | 16 KB       | Size of each block         |
+| MAX_BUFFER | 64 KB       | Max buffer before pause    |
+| IV Length  | 12 bytes    | Initialization Vector size |
+| Algorithm  | AES-256-GCM | Encryption algorithm       |
 
-### Benchmarks (Estimado)
+### Benchmarks (Estimated)
 
-- ✅ Arquivos pequenos (< 10 MB): 1-2 segundos
-- ✅ Arquivos médios (10-100 MB): 10-30 segundos
-- ✅ Arquivos grandes (> 100 MB): Depende da conexão de rede
+- ✅ Small files (< 10 MB): 1-2 seconds
+- ✅ Medium files (10-100 MB): 10-30 seconds
+- ✅ Large files (> 100 MB): Depends on network connection
 
 ---
 
 ## 🐛 Troubleshooting
 
-### Problema: "Conexão não estabelecida"
+### Issue: "Connection not established"
 
-**Solução:**
+**Solution:**
 
-1. Verifique se ambos os peers estão em redes competíveis
-2. Alguns firewalls podem bloquear WebRTC
-3. Tente usar um VPN ou proxy
+1. Check if both peers are on compatible networks
+2. Some firewalls may block WebRTC
+3. Try using a VPN or proxy
 
-### Problema: "Erro ao descriptografar"
+### Issue: "Decryption error"
 
-**Solução:**
+**Solution:**
 
-1. Certifique-se de que importou a chave correta
-2. A chave deve ser exatamente igual em ambos os lados
-3. Verifique se a chave não foi modificada ao copiar
+1. Make sure you imported the correct key
+2. The key must be exactly the same on both sides
+3. Check if the key wasn't modified when copying
 
-### Problema: "Arquivo não chegou"
+### Issue: "File did not arrive"
 
-**Solução:**
+**Solution:**
 
-1. Verifique a conexão de rede
-2. Veja se a barra de progresso alcançou 100%
-3. Tente novamente com um arquivo menor
+1. Check your network connection
+2. See if the progress bar reached 100%
+3. Try again with a smaller file
 
 ---
 
-## 🤝 Contribuição
+## 🤝 Contributing
 
-Adoramos contribuições! por favor siga estes passos:
+We love contributions! Please follow these steps:
 
-### Como Contribuir
+### How to Contribute
 
-1. **Fork o projeto**
+1. **Fork the project**
 
 ```bash
 git clone https://github.com/seu-usuario/file-transfer.git
@@ -402,58 +402,58 @@ git push origin feature/MinhaFeature
 - ♿ Acessibilidade
 - 🔐 Segurança
 
-### Reportar Bugs
+### Report Bugs
 
-Encontrou um bug? Abra uma issue descrevendo:
+Found a bug? Open an issue describing:
 
-- Passos para reproduzir
-- Comportamento esperado
-- Comportamento atual
-- Screenshots (se aplicável)
-- Seu ambiente (OS, navegador, versão Node.js)
-
----
-
-## 📄 Licença
-
-Este projeto está licenciado sob a Licença MIT - veja o arquivo [LICENSE](LICENSE) para detalhes.
-
-### Resumo MIT
-
-Você é livre para:
-
-- ✅ Usar comercialmente
-- ✅ Modificar o código
-- ✅ Distribuir
-- ✅ Usar privadamente
-
-Sob as condições:
-
-- ⚠️ Incluir aviso de copyright
-- ⚠️ Incluir cópia da licença
+- Steps to reproduce
+- Expected behavior
+- Actual behavior
+- Screenshots (if applicable)
+- Your environment (OS, browser, Node.js version)
 
 ---
 
-## 👨‍💻 Autor
+## 📄 License
 
-Desenvolvido com ❤️ para a comunidade open-source.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+### MIT License Summary
+
+You are free to:
+
+- ✅ Use commercially
+- ✅ Modify the code
+- ✅ Distribute
+- ✅ Use privately
+
+Under the conditions:
+
+- ⚠️ Include copyright notice
+- ⚠️ Include copy of the license
 
 ---
 
-## 🙏 Agradecimentos
+## 👨‍💻 Author
 
-- [Next.js](https://nextjs.org/) - Framework incrível
-- [WebRTC](https://webrtc.org/) - Comunicação P2P
-- [Web Crypto API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Crypto_API) - Criptografia nativa
-- [Shadcn/UI](https://ui.shadcn.com/) - Componentes bonitos
-- Comunidade open-source
+Developed with ❤️ for the open-source community.
+
+---
+
+## 🙏 Acknowledgments
+
+- [Next.js](https://nextjs.org/) - Amazing framework
+- [WebRTC](https://webrtc.org/) - P2P communication
+- [Web Crypto API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Crypto_API) - Native encryption
+- [Shadcn/UI](https://ui.shadcn.com/) - Beautiful components
+- Open-source community
 
 ---
 
 <div align="center">
 
-**[⬆ Voltar ao topo](#-p2p-file-transfer)**
+**[⬆ Back to top](#-p2p-file-transfer)**
 
-Se este projeto foi útil, deixe uma ⭐ para mostrar seu apoio!
+If this project was useful, leave a ⭐ to show your support!
 
 </div>
