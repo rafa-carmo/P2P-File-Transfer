@@ -13,6 +13,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_BASE_URL ?? "https://localhost:3000",
+  ),
   title: "P2P Transfer — Secure File Transfer",
   description:
     "Transfer files directly between peers via WebRTC with end-to-end AES-256-GCM encryption. No server, no size limit, fully private.",
