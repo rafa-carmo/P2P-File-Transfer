@@ -1,0 +1,50 @@
+# GitHub Code Owners
+
+# This file specifies who should be automatically assigned to review pull requests
+
+# Default owners for all files in the repository
+
+- @owner
+
+# Documentation
+
+\*.md @owner
+docs/ @owner
+
+# Configuration files
+
+next.config.ts @owner
+tsconfig.json @owner
+package.json @owner
+.eslintrc\* @owner
+
+# Workflow and CI/CD
+
+.github/ @owner
+
+# Type definitions and critical files
+
+types/ @owner
+
+# Utils and core functionality
+
+utils/fileTransfer/ @owner
+lib/ @owner
+
+# Components
+
+components/ @owner
+
+# Application code
+
+app/ @owner
+
+# Tests
+
+**tests**/ @owner
+_.test.ts @owner
+_.spec.ts @owner
+
+# Prisma database
+
+prisma/ @owner

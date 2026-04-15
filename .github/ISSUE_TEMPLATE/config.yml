@@ -1,0 +1,18 @@
+blank_issues_enabled: false
+
+contact_links:
+  - name: GitHub Discussions
+    url: https://github.com/YOUR_USERNAME/file-transfer/discussions
+    about: "Ask questions and discuss ideas in our community forum"
+
+  - name: Security Report
+    url: https://github.com/YOUR_USERNAME/file-transfer/security/advisories
+    about: "Report security vulnerabilities responsibly"
+
+  - name: Documentation
+    url: https://github.com/YOUR_USERNAME/file-transfer#readme
+    about: "Read our documentation and guides"
+
+  - name: Contributing Guidelines
+    url: https://github.com/YOUR_USERNAME/file-transfer/blob/main/README.md#-contributing
+    about: "Learn how to contribute to this project"
