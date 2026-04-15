@@ -1,5 +1,6 @@
 import { MAX_BUFFER, CHANNEL_NAME } from "./constants";
 import { DataChannelMessage, FileMeta } from "./types";
+import { EncryptedData } from "./encryption";
 
 export function createDataChannel(
   pc: RTCPeerConnection,
@@ -11,21 +12,27 @@ export function createDataChannel(
   return channel;
 }
 
+export interface ChannelListenerOptions {
+  decryptionKey?: CryptoKey;
+  onEncryptedChunkError?: (error: Error) => void;
+}
+
 export function setupChannelListeners(
   channel: RTCDataChannel,
   onOpen: () => void,
   onMetaReceived: (meta: FileMeta) => void,
-  onDataReceived: (data: ArrayBuffer) => void,
+  onDataReceived: (data: ArrayBuffer) => void | Promise<void>,
   onTransferComplete: () => void,
+  options?: ChannelListenerOptions,
 ) {
   channel.onopen = () => {
     console.log("Canal aberto");
     onOpen();
   };
 
-  channel.onmessage = (e) => {
+  channel.onmessage = async (e) => {
     if (typeof e.data === "string") {
-      const msg: DataChannelMessage = JSON.parse(e.data);
+      const msg: any = JSON.parse(e.data);
 
       if (msg.type === "meta") {
         onMetaReceived(msg as FileMeta);
@@ -34,10 +41,23 @@ export function setupChannelListeners(
       if (msg.type === "end") {
         onTransferComplete();
       }
+
+      if (msg.type === "chunk" && options?.decryptionKey) {
+        // Mensagem contém chunk criptografado
+        try {
+          const decrypted = await import("./encryption").then((m) =>
+            m.decryptData(msg.data as EncryptedData, options.decryptionKey!),
+          );
+          await onDataReceived(decrypted);
+        } catch (error) {
+          const err = error instanceof Error ? error : new Error("Erro ao descriptografar");
+          options.onEncryptedChunkError?.(err);
+        }
+      }
       return;
     }
 
-    onDataReceived(e.data);
+    await onDataReceived(e.data);
   };
 
   channel.onerror = (error) => {

@@ -4,8 +4,11 @@ import { createPeerConnection, onICECandidate } from "./peerConnection";
 import { createDataChannel, isChannelReady, setupChannelListeners, setupOndatachannel } from "./channel";
 import { createOffer, setRemoteDescription } from "./signaling";
 import { sendFile } from "./sendFile";
-import { receiveFile, initializeReceiveState, addReceivedChunk, setReceivedFileMeta, getReceivedFile, getReceiveProgress } from "./receiveFile";
+import { initializeReceiveState, addReceivedChunk, addReceivedEncryptedChunk, setReceivedFileMeta, getReceivedFile, getReceiveProgress } from "./receiveFile";
 import { downloadFile } from "./download";
+
+import { EncryptedData, exportKeyToString, importKeyFromString } from "./encryption";
+import { createNewKey } from "./keyManagement";
 
 export function useFileTransfer() {
   const [state, setState] = useState<FileTransferState>({
@@ -15,11 +18,16 @@ export function useFileTransfer() {
     receiveProgress: 0,
     isConnected: false,
     error: null,
+    encryptionKey: "",
+    remoteEncryptionKey: "",
+    isEncryptionEnabled: false,
   });
 
   const pcRef = useRef<RTCPeerConnection | null>(null);
   const channelRef = useRef<RTCDataChannel | null>(null);
   const receiveStateRef = useRef(initializeReceiveState());
+  const encryptionKeyRef = useRef<CryptoKey | null>(null);
+  const remoteEncryptionKeyRef = useRef<CryptoKey | null>(null);
 
   const setLocalSDP = useCallback((sdp: string) => {
     setState((prev) => ({ ...prev, localSDP: sdp }));
@@ -32,6 +40,53 @@ export function useFileTransfer() {
   const setIsConnected = useCallback((connected: boolean) => {
     setState((prev) => ({ ...prev, isConnected: connected }));
   }, []);
+
+  const handleGenerateEncryptionKey = useCallback(async () => {
+    try {
+      const key = await createNewKey();
+      encryptionKeyRef.current = key;
+      const keyString = await exportKeyToString(key);
+      setState((prev) => ({
+        ...prev,
+        encryptionKey: keyString,
+        isEncryptionEnabled: true,
+        error: null,
+      }));
+    } catch (err) {
+      const errorMessage =
+        err instanceof Error ? err.message : "Erro ao gerar chave de criptografia";
+      setState((prev) => ({ ...prev, error: errorMessage }));
+    }
+  }, []);
+
+  const handleImportRemoteEncryptionKey = useCallback(
+    async (keyString: string) => {
+      try {
+        const key = await importKeyFromString(keyString);
+        remoteEncryptionKeyRef.current = key;
+        setState((prev) => ({
+          ...prev,
+          remoteEncryptionKey: keyString,
+          error: null,
+        }));
+      } catch (err) {
+        const errorMessage =
+          err instanceof Error
+            ? err.message
+            : "Erro ao importar chave de criptografia remota";
+        setState((prev) => ({ ...prev, error: errorMessage }));
+      }
+    },
+    [],
+  );
+
+  const copyEncryptionKeyToClipboard = useCallback(() => {
+    if (state.encryptionKey) {
+      navigator.clipboard.writeText(state.encryptionKey);
+      return true;
+    }
+    return false;
+  }, [state.encryptionKey]);
 
   const initPeerConnection = useCallback(() => {
     try {
@@ -46,9 +101,13 @@ export function useFileTransfer() {
           channel,
           () => setIsConnected(true),
           (meta) => setReceivedFileMeta(receiveStateRef.current, meta),
-          (data) => {
-            const progress = addReceivedChunk(receiveStateRef.current, data);
-            setState((prev) => ({ ...prev, receiveProgress: progress }));
+          async (data) => {
+            const progress = await addReceivedChunk(
+              receiveStateRef.current,
+              data,
+              remoteEncryptionKeyRef.current || undefined,
+            );
+            setState((prev) => ({ ...prev, receiveProgress: progress as number }));
           },
           () => {
             const blob = getReceivedFile(receiveStateRef.current);
@@ -56,6 +115,13 @@ export function useFileTransfer() {
               receiveStateRef.current.fileMeta?.name || "downloaded-file";
             downloadFile(blob, filename);
             receiveStateRef.current = initializeReceiveState();
+          },
+          {
+            decryptionKey: remoteEncryptionKeyRef.current || undefined,
+            onEncryptedChunkError: (error) => {
+              console.error("Erro ao descriptografar chunk:", error);
+              setError(`Erro ao descriptografar: ${error.message}`);
+            },
           },
         );
       });
@@ -67,9 +133,13 @@ export function useFileTransfer() {
         channel,
         () => setIsConnected(true),
         (meta) => setReceivedFileMeta(receiveStateRef.current, meta),
-        (data) => {
-          const progress = addReceivedChunk(receiveStateRef.current, data);
-          setState((prev) => ({ ...prev, receiveProgress: progress }));
+        async (data) => {
+          const progress = await addReceivedChunk(
+            receiveStateRef.current,
+            data,
+            remoteEncryptionKeyRef.current || undefined,
+          );
+          setState((prev) => ({ ...prev, receiveProgress: progress as number }));
         },
         () => {
           const blob = getReceivedFile(receiveStateRef.current);
@@ -77,6 +147,13 @@ export function useFileTransfer() {
             receiveStateRef.current.fileMeta?.name || "downloaded-file";
           downloadFile(blob, filename);
           receiveStateRef.current = initializeReceiveState();
+        },
+        {
+          decryptionKey: remoteEncryptionKeyRef.current || undefined,
+          onEncryptedChunkError: (error) => {
+            console.error("Erro ao descriptografar chunk:", error);
+            setError(`Erro ao descriptografar: ${error.message}`);
+          },
         },
       );
 
@@ -129,9 +206,14 @@ export function useFileTransfer() {
           return;
         }
 
-        await sendFile(channelRef.current!, file, (progress) => {
-          setState((prev) => ({ ...prev, sendProgress: progress }));
-        });
+        await sendFile(
+          channelRef.current!,
+          file,
+          (progress) => {
+            setState((prev) => ({ ...prev, sendProgress: progress }));
+          },
+          encryptionKeyRef.current || undefined,
+        );
         setError(null);
       } catch (err) {
         const errorMessage =
@@ -153,6 +235,8 @@ export function useFileTransfer() {
     pcRef.current = null;
     channelRef.current = null;
     receiveStateRef.current = initializeReceiveState();
+    encryptionKeyRef.current = null;
+    remoteEncryptionKeyRef.current = null;
 
     setState({
       localSDP: "",
@@ -161,6 +245,9 @@ export function useFileTransfer() {
       receiveProgress: 0,
       isConnected: false,
       error: null,
+      encryptionKey: "",
+      remoteEncryptionKey: "",
+      isEncryptionEnabled: false,
     });
   }, []);
 
@@ -171,5 +258,8 @@ export function useFileTransfer() {
     setRemote: handleSetRemote,
     sendFile: handleSendFile,
     reset,
+    generateEncryptionKey: handleGenerateEncryptionKey,
+    importRemoteEncryptionKey: handleImportRemoteEncryptionKey,
+    copyEncryptionKeyToClipboard,
   };
 }

@@ -14,15 +14,22 @@ export function FileTransferComponent() {
     receiveProgress,
     isConnected,
     error,
+    encryptionKey,
+    remoteEncryptionKey,
+    isEncryptionEnabled,
     initPeerConnection,
     createOffer,
     setRemote,
     sendFile,
     reset,
+    generateEncryptionKey,
+    importRemoteEncryptionKey,
+    copyEncryptionKeyToClipboard,
   } = useFileTransfer();
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const remoteSDPRef = useRef<HTMLTextAreaElement>(null);
+  const remoteEncryptionKeyRef = useRef<HTMLTextAreaElement>(null);
 
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -38,8 +45,21 @@ export function FileTransferComponent() {
     }
   };
 
+  const handleImportRemoteKey = async () => {
+    const keyString = remoteEncryptionKeyRef.current?.value;
+    if (keyString) {
+      await importRemoteEncryptionKey(keyString);
+    }
+  };
+
   const handleCopyLocalSDP = () => {
     navigator.clipboard.writeText(localSDP);
+  };
+
+  const handleCopyEncryptionKey = () => {
+    if (copyEncryptionKeyToClipboard()) {
+      // Show feedback
+    }
   };
 
   return (
@@ -117,9 +137,80 @@ export function FileTransferComponent() {
         </div>
       </div>
 
+      {/* Seção de Criptografia */}
+      <div className="space-y-4 border-t pt-6">
+        <h3 className="text-xl font-semibold">🔐 Criptografia P2P</h3>
+
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 text-sm text-blue-800">
+          <p className="font-medium mb-2">Sobre criptografia:</p>
+          <ul className="list-disc list-inside space-y-1 text-xs">
+            <li>Criptografa o arquivo antes de enviar</li>
+            <li>Apenas com a chave correta é possível descriptografar</li>
+            <li>Ambos os lados precisam compartilhar suas chaves</li>
+          </ul>
+        </div>
+
+        <div className="space-y-2">
+          <Button
+            onClick={generateEncryptionKey}
+            className="w-full"
+            variant={isEncryptionEnabled ? "secondary" : "default"}
+          >
+            {isEncryptionEnabled
+              ? "✓ Chave de Criptografia Gerada"
+              : "Gerar Chave de Criptografia"}
+          </Button>
+        </div>
+
+        {encryptionKey && (
+          <div className="space-y-2">
+            <label className="block text-sm font-medium">Sua Chave de Criptografia:</label>
+            <Textarea
+              value={encryptionKey}
+              readOnly
+              rows={3}
+              className="font-mono text-xs bg-gray-50"
+            />
+            <Button
+              onClick={handleCopyEncryptionKey}
+              variant="outline"
+              className="w-full"
+            >
+              Copiar Chave de Criptografia
+            </Button>
+          </div>
+        )}
+
+        <div className="space-y-2">
+          <label className="block text-sm font-medium">Chave de Criptografia Remota:</label>
+          <Textarea
+            ref={remoteEncryptionKeyRef}
+            placeholder="Cole a chave de criptografia do outro peer aqui"
+            rows={3}
+            className="font-mono text-xs"
+          />
+          <Button
+            onClick={handleImportRemoteKey}
+            variant="outline"
+            className="w-full"
+            disabled={!remoteEncryptionKeyRef.current?.value}
+          >
+            Importar Chave Remota
+          </Button>
+        </div>
+
+        {remoteEncryptionKey && (
+          <div className="bg-green-50 border border-green-200 rounded-lg p-2 text-sm text-green-800">
+            ✓ Chave remota importada com sucesso
+          </div>
+        )}
+      </div>
+
       {/* Seção de Envio */}
       <div className="space-y-4 border-t pt-6">
-        <h3 className="text-xl font-semibold">Enviar Arquivo</h3>
+        <h3 className="text-xl font-semibold">
+          Enviar Arquivo {isEncryptionEnabled && "🔒"}
+        </h3>
 
         <div>
           <input
