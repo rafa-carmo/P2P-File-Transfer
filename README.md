@@ -86,7 +86,6 @@ Secure P2P file transfer via WebRTC with end-to-end AES-256-GCM encryption
 <td>
 
 - **Next.js API Routes** - Serverless backend
-- **Prisma 7.6.0** - Database ORM
 - **SQLite** - Lightweight database
 
 </td>
@@ -251,9 +250,19 @@ file-transfer/
 │   ├── useFileTransfer.ts       # Main React hook
 │   └── README.md                # Detailed documentation
 │
-├── prisma/
-│   ├── schema.prisma            # Database schema
-│   └── migrations/              # Migrations
+├── __tests__/                    # Jest test suites
+│   ├── app/
+│   │   └── page.test.tsx        # Home page tests
+│   └── utils/fileTransfer/
+│       ├── constants.test.ts
+│       ├── encryption.test.ts
+│       ├── keyManagement.test.ts
+│       ├── download.test.ts
+│       ├── channel.test.ts
+│       ├── receiveFile.test.ts
+│       ├── sendFile.test.ts
+│       ├── peerConnection.test.ts
+│       └── signaling.test.ts
 │
 ├── public/                       # Static files
 ├── package.json                 # Dependencies
@@ -349,7 +358,49 @@ Automatic Download
 
 ---
 
-## 🤝 Contributing
+## � Testing
+
+The project uses **Jest** with **React Testing Library** for unit and component tests.
+
+### Running Tests
+
+```bash
+# Run all tests
+npm test
+
+# Watch mode (re-runs on file changes)
+npm run test:watch
+
+# With coverage report
+npm run test:coverage
+```
+
+### Test Coverage
+
+| Module                              | What's Tested                                                            |
+| ----------------------------------- | ------------------------------------------------------------------------ |
+| `app/page.tsx`                      | Rendering, heading, subtitle, footer, child components                   |
+| `utils/fileTransfer/constants`      | Values and relationships between constants                               |
+| `utils/fileTransfer/encryption`     | Key generation, export/import, AES-256-GCM encrypt/decrypt, JSON helpers |
+| `utils/fileTransfer/keyManagement`  | Key creation, key-exchange message, `isValidKeyString`                   |
+| `utils/fileTransfer/download`       | Object URL lifecycle, anchor attributes                                  |
+| `utils/fileTransfer/channel`        | Channel readiness, message routing, `ondatachannel` setup                |
+| `utils/fileTransfer/receiveFile`    | State initialization, chunk accumulation, progress, blob assembly        |
+| `utils/fileTransfer/sendFile`       | Progress calculation, metadata, chunked sending, multi-chunk files       |
+| `utils/fileTransfer/peerConnection` | RTCPeerConnection creation, ICE candidate callback                       |
+| `utils/fileTransfer/signaling`      | `createOffer`, `createAnswer`, `setRemoteDescription`                    |
+
+### Test Setup
+
+The setup file (`jest.setup.ts`) provides polyfills required in the jsdom environment:
+
+- **`TextEncoder` / `TextDecoder`** — from `node:util`
+- **`globalThis.crypto`** — from `node:crypto`, exposes `crypto.subtle` for Web Crypto API tests
+- **`Blob.prototype.arrayBuffer`** — polyfilled via `FileReader` for file chunk tests
+
+---
+
+## �🤝 Contributing
 
 We love contributions! Please follow these steps:
 
